@@ -1,32 +1,13 @@
 const axios = require('axios')
-
 var open = require("open");
+var configs = require('./config.js')
 
-//列表token
-const LTOKEN = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjQ0ODEwLCJVc2VySW5mbyI6IlRJNHl2Wm1jSzg3a2gzMVZqOHh4TXhCZ0c0a3dqWEltVU51Rk0xcmRDSjFnYkxiZWxlV3FTUk0rVitwR1JSZUcyRmtSa0tac3Q4QkRpdzNpZEZMY2lMaDJGaTdMSklHSnE2bEc0bTk1dkpiWHFHaXBSRDMraVFNYlp3dm9rMUN0Um5wWE4wcDVlRGhacE9NSzRsS0JTZz09IiwibmJmIjoxNjU5Nzk2OTI0LCJleHAiOjE2NjAyMjg5MjQsImlhdCI6MTY1OTc5NjkyNCwiaXNzIjoic2hpYmFfYWRtaW4iLCJhdWQiOiJzaGliYV9hZG1pbiJ9.S-6trHWxkF6iZRIDgrAwepSP3LuaeGszAjSuLmymXjo"
-//商品价格
-const PRICE = 17800
-
-const groupId = {
-    "215": '老鼠',
-    "213": '山林虎',
-    "217": '牛',
-    "220": '鸡',
-    '201': '猴子',
-    '224': '蛇'
-}
-//商品id
-const ID = 215
-//支付token
-const TOKEN = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjQ0ODEwLCJVc2VySW5mbyI6IlRJNHl2Wm1jSzg3a2gzMVZqOHh4TXhCZ0c0a3dqWEltVU51Rk0xcmRDSjFnYkxiZWxlV3FTUk0rVitwR1JSZUcyRmtSa0tac3Q4QkRpdzNpZEZMY2lMaDJGaTdMSklHSnE2bEc0bTk1dkpiWHFHaXBSRDMraVFNYlp3dm9rMUN0Um5wWE4wcDVlRGhacE9NSzRsS0JTZz09IiwibmJmIjoxNjU5ODAzMTY5LCJleHAiOjE2NjAyMzUxNjksImlhdCI6MTY1OTgwMzE2OSwiaXNzIjoic2hpYmFfYWRtaW4iLCJhdWQiOiJzaGliYV9hZG1pbiJ9.XCZ9pMgKyE3NOMwDjwX46scJNdCEMQDfj6DUvKNGq3g"
-//payType  //1:银行卡 2:钱包
-const PAYTYPE = 1
-
+let { LTOKEN, PRICE, ID, TOKEN, PAYTYPE, timeout } = configs
 
 //列表用的
 const instance = axios.create({
     baseURL: 'https://m.18art.art/api/',
-    timeout: 15000,
+    timeout: timeout,
     headers: {
         origin: 'https://m.18art.art',
         'content-type': 'application/json;charset=UTF-8',
@@ -37,7 +18,7 @@ const instance = axios.create({
 //支付用的
 const instance2 = axios.create({
     baseURL: 'https://m.18art.art/api/',
-    timeout: 15000,
+    timeout: timeout,
     headers: {
         origin: 'https://m.18art.art',
         'content-type': 'application/json;charset=UTF-8',
@@ -63,6 +44,8 @@ function requestList() {
         console.log(res.data.message)
         let { items } = res.data.data
         let _price = []
+        let p = String(items.map(item => item.price))
+        console.log(p)
         let open = items.filter(item => item.saleStatus == 3 && item.price <= PRICE).map(item => {
             _price.push(item.price)
             return item.id
@@ -94,7 +77,7 @@ function pay(id, _price) {
     }).then(res => {
         console.log(res.data)
         console.log(res.data.data)
-        if (!res.data.data || (res.data.message != '已拥有一笔待支付订单，请先支付或取消'&&res.data.message != '请求成功')) {
+        if (!res.data.data || (res.data.message != '已拥有一笔待支付订单，请先支付或取消' && res.data.message != '请求成功')) {
             console.log('支付失败，重新请求列表')
             requestList()
             return

@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node ./index.js"
+    "hu": "cross-env price=13000 id=213 node ./index.js",
+    "ji": "cross-env price=13000 id=220 node ./index.js",
+    "shu": "cross-env price=5000 id=215 node ./index.js"
   },
   "keywords": [],
   "author": "",
@@ -12,5 +14,8 @@
   "dependencies": {
     "axios": "^0.27.2",
     "open": "^8.4.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }

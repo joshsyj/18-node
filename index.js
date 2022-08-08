@@ -30,10 +30,10 @@ const instance2 = axios.create({
 let timer = null
 function requestList() {
     console.log('请求列表。。。')
-    if (timer) clearTimeout(timer)
-    timer = setTimeout(() => {
-        requestList()
-    }, 7000)
+    // if (timer) clearTimeout(timer)
+    // timer = setTimeout(() => {
+    //     requestList()
+    // }, 7000)
     instance.post('agg/market/commodity-items', {
         groupId: ID,
         order: [{ fieldName: "DbPrice", order: "Asc" }],

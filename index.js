@@ -2,7 +2,7 @@ const axios = require('axios')
 var open = require("open");
 var configs = require('./config.js')
 
-let { LTOKEN, PRICE, ID, TOKEN, PAYTYPE, timeout } = configs
+let { LTOKEN, PRICE, ID, TOKEN, PAYTYPE, timeout, groupId } = configs
 
 //列表用的
 const instance = axios.create({
@@ -41,10 +41,11 @@ function requestList() {
         pageSize: 10,
     }).then(res => {
         if (timer) clearTimeout(timer)
-        console.log(res.data.message)
+        // console.log(res.data.message)
         let { items } = res.data.data
         let _price = []
         let p = String(items.map(item => item.price))
+        console.log(`当前-----${groupId[ID]}-----价格：`)
         console.log(p)
         let open = items.filter(item => item.saleStatus == 3 && item.price <= PRICE).map(item => {
             _price.push(item.price)

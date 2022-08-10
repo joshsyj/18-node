@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "hu": "cross-env price=13000 id=213 node ./index.js",
-    "ji": "cross-env price=13000 id=220 node ./index.js",
-    "shu": "cross-env price=5000 id=215 node ./index.js"
+    "hu": "cross-env price=13500 id=213 node ./index.js",
+    "ji": "cross-env price=12500 id=220 node ./index.js",
+    "shu": "cross-env price=3000 id=215 node ./index.js",
+    "niu": "cross-env price=18000 id=217 node ./index.js",
+    "lh": "cross-env price=4000 id=231 node ./index.js"
   },
   "keywords": [],
   "author": "",

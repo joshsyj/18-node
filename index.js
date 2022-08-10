@@ -2,7 +2,7 @@ const axios = require('axios')
 var open = require("open");
 var configs = require('./config.js')
 
-let { LTOKEN, PRICE, ID, TOKEN, PAYTYPE, timeout, groupId } = configs
+let { LTOKEN, PRICE, ID, TOKEN, PAYTYPE, timeout, groupId, timeOut } = configs
 
 //列表用的
 const instance = axios.create({
@@ -27,6 +27,7 @@ const instance2 = axios.create({
 });
 
 
+
 let timer = null
 function requestList() {
     console.log('请求列表。。。')
@@ -41,11 +42,18 @@ function requestList() {
         pageSize: 10,
     }).then(res => {
         if (timer) clearTimeout(timer)
-        // console.log(res.data.message)
+        if (res.data.statusCode != 200) {
+            console.log(res.data.statusCode, res.data.message)
+            timer = setTimeout(() => {
+                requestList()
+            }, timeOut)
+            return
+        }
         let { items } = res.data.data
         let _price = []
         let p = String(items.map(item => item.price))
         console.log(`当前-----${groupId[ID]}-----价格：`)
+        console.log(`期望价格:${PRICE}`)
         console.log(p)
         let open = items.filter(item => item.saleStatus == 3 && item.price <= PRICE).map(item => {
             _price.push(item.price)
@@ -53,16 +61,19 @@ function requestList() {
         })
         console.log('未匹配到合适的价格。。。')
         if (!open.length) {
-            requestList()
+            timer = setTimeout(() => {
+                requestList()
+            }, timeOut)
             return
         }
-        // console.log('requestList::成功')
         open.forEach((id, index) => {
             pay(id, _price[index])
         });
     }).catch((e) => {
-        console.log('requestList::失败')
-        requestList()
+        console.log('列表请求超时::失败')
+        timer = setTimeout(() => {
+            requestList()
+        }, timeOut)
     })
 
 }
@@ -80,7 +91,9 @@ function pay(id, _price) {
         console.log(res.data.data)
         if (!res.data.data || (res.data.message != '已拥有一笔待支付订单，请先支付或取消' && res.data.message != '请求成功')) {
             console.log('支付失败，重新请求列表')
-            requestList()
+            timer = setTimeout(() => {
+                requestList()
+            }, timeOut)
             return
         }
         console.log(`pay::成功,当前订单价格:${_price}`)

@@ -40,7 +40,7 @@ const configs = {
     groupId,
     //列表token 173
     LTOKEN: lToken,
-    timeout: 15000,
+    timeout: 8000,
     timeOut: 1000,//接口延迟调用
     PAYTYPE: 1,//1:银行卡 2:钱包
     //支付token
@@ -48,7 +48,8 @@ const configs = {
     // ID: 213, //商品id
     // PRICE: 13000 //商品价格
     ID: process.env.id, //商品id
-    PRICE: process.env.price //商品价格
+    PRICE: process.env.price, //商品价格
+    PAGE: Number(process.env.page)
 }
 
 console.log(process.env.id, process.env.price)

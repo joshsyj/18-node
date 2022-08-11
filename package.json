@@ -10,7 +10,10 @@
     "niu": "cross-env price=18000 id=217 node ./index.js",
     "hx": "cross-env price=5900 id=231 node ./index.js",
     "jz": "cross-env price=8000 id=232 node ./index.js",
-    "jzse": "cross-env price=19000 id=232 node ./index1.js"
+    "jzse": "cross-env page=1 price=19000 id=232 node ./index1.js",
+    "jzse1": "cross-env page=6 price=19000 id=232 node ./index1.js",
+    "jzse2": "cross-env page=11 price=19000 id=232 node ./index1.js",
+    "jzse3": "cross-env page=16 price=19000 id=232 node ./index1.js"
   },
   "keywords": [],
   "author": "",

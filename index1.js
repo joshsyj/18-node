@@ -4,15 +4,15 @@ var configs = require('./config.js')
 const HttpsProxyAgent = require("https-proxy-agent");
 const HttpProxyAgent = require("http-proxy-agent");
 let total = 0
-let page = 1
+let basePage = 5
 let serialLock = true
 let serial = ['5', '6']
 
 
-let { LTOKEN, PRICE, ID, TOKEN, PAYTYPE, timeout, groupId, timeOut, userAgents } = configs
+let { LTOKEN, PRICE, ID, TOKEN, PAYTYPE, timeout, groupId, timeOut, userAgents, PAGE } = configs
 // const httpsAgent = new HttpsProxyAgent(`http://220.246.124.100:80`);
 // const httpAgent = new HttpProxyAgent(`http://220.246.124.100:80`);
-
+let page = PAGE
 
 //列表用的
 const instance = axios.create({
@@ -72,7 +72,11 @@ function requestList() {
         console.log(p)
         let open = []
         if (serialLock) {
-            page++
+            ++page
+            if (page > PAGE + basePage) {
+                page = PAGE
+            }
+            console.log(page, PAGE + basePage);
             open = items.filter(item => {
                 return item.saleStatus == 3 && serial.includes(item.commodityNo.slice(-1)) && item.price <= PRICE
             }).map(item => {
